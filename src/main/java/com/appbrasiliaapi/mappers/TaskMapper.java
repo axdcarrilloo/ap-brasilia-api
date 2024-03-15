@@ -34,12 +34,13 @@ public class TaskMapper {
     }
     public static List<TaskViewDto> convertToListDto(List<TaskEntity> tasks) {
         List<TaskViewDto> tasksDto = new ArrayList<>();
-        tasks.forEach(task -> TaskViewDto.builder()
+        tasks.forEach(task -> tasksDto.add(TaskViewDto.builder()
                 .id(task.getId())
                 .title(task.getTitle())
                 .description(task.getDescription())
                 .status(task.getStatus())
                 .user(task.getUser())
+                .build())
         );
         return tasksDto;
     }
@@ -49,6 +50,7 @@ public class TaskMapper {
                 .title(taskDto.getTitle())
                 .description(taskDto.getDescription())
                 .status(taskDto.getStatus())
+                .user(taskDto.getUser())
                 .build()
         ;
     }

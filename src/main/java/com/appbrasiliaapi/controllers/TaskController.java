@@ -8,16 +8,16 @@ import com.appbrasiliaapi.services.TaskService;
 import com.appbrasiliaapi.utils.Constants;
 import com.appbrasiliaapi.utils.Route;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(value = Route.URL_BASE+Route.TASK)
+@RequiredArgsConstructor
 public class TaskController {
-    @Autowired
-    private TaskService taskSvc;
+
+    private final TaskService taskSvc;
 
     @DeleteMapping(value = Route.DELETE)
     public ResponseEntity<MainResponseDto> delete(@RequestBody TaskDeleteByIdTaskAndIdUserDto taskDto) {
