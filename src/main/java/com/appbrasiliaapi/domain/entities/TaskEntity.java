@@ -1,5 +1,6 @@
 package com.appbrasiliaapi.domain.entities;
 
+import com.appbrasiliaapi.dtos.StatusTask;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +20,8 @@ public class TaskEntity {
 
     private String description;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusTask status;
 
     @ManyToOne
     @JoinColumn(name = "id_user", nullable = false, referencedColumnName = "id")

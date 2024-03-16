@@ -1,6 +1,8 @@
 package com.appbrasiliaapi.dtos;
 
 import com.appbrasiliaapi.domain.entities.UserEntity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -15,7 +17,8 @@ public class TaskRegisterDto {
 
     private String description;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private StatusTask status;
 
     private UserEntity user;
 }
