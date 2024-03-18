@@ -1,9 +1,6 @@
 package com.appbrasiliaapi.controllers;
 
-import com.appbrasiliaapi.dtos.MainResponseDto;
-import com.appbrasiliaapi.dtos.TaskDeleteByIdTaskAndIdUserDto;
-import com.appbrasiliaapi.dtos.TaskRegisterDto;
-import com.appbrasiliaapi.dtos.TaskViewDto;
+import com.appbrasiliaapi.dtos.*;
 import com.appbrasiliaapi.services.TaskService;
 import com.appbrasiliaapi.utils.Constants;
 import com.appbrasiliaapi.utils.Route;
@@ -11,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
+import java.util.Objects;
 
 @RestController
 @RequestMapping(value = Route.URL_BASE+Route.TASK)
@@ -29,7 +29,7 @@ public class TaskController {
     }
 
     @PostMapping(value = Route.CHANGETO_COMPLETED)
-    public ResponseEntity<MainResponseDto> changeToCompleted(@RequestBody TaskViewDto taskDto) {
+    public ResponseEntity<MainResponseDto> changeToCompleted(@RequestBody TaskChangeStatusDto taskDto) {
         return new ResponseEntity<>(MainResponseDto.builder()
                 .message(Constants.UPDATE_SUCCESS)
                 .response(taskSvc.changeToCompleted(taskDto))
@@ -48,10 +48,20 @@ public class TaskController {
 
     @PostMapping(value = Route.REGISTER)
     public ResponseEntity<MainResponseDto> register(@RequestBody TaskRegisterDto taskDto) {
-        return new ResponseEntity<>(MainResponseDto.builder()
-                .message(Constants.REGISTER_SUCCESS)
-                .response(taskSvc.register(taskDto))
-                .build(), HttpStatus.CREATED)
-        ;
+        Map<String, Object> map = taskSvc.register(taskDto);
+        String errorExistUser = (String)map.get("errorExistUser");
+        if(errorExistUser != null) {
+            return new ResponseEntity<>(MainResponseDto.builder()
+                    .message(Constants.REGISTER_FAILED)
+                    .response(errorExistUser)
+                    .build(), HttpStatus.BAD_REQUEST)
+            ;
+        } else {
+            return new ResponseEntity<>(MainResponseDto.builder()
+                    .message(Constants.REGISTER_SUCCESS)
+                    .response(map.get("Response"))
+                    .build(), HttpStatus.CREATED)
+            ;
+        }
     }
 }
